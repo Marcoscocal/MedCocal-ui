@@ -57,25 +57,25 @@
 
     <script src="script.js"></script>
     <script>
-        // Função para buscar e exibir as contagens da API
+        // Função para buscar e exibir as contagens da API com o prefixo /api/
         async function carregarTotais() {
             try {
                 // Buscando Pacientes
-                const resPacientes = await fetch(`${API_URL}/pacientes`);
+                const resPacientes = await fetch(`${API_URL}/api/pacientes`);
                 if(resPacientes.ok) {
                     const pacientes = await resPacientes.json();
                     document.getElementById('totalPacientes').innerText = pacientes.length || 0;
                 }
 
                 // Buscando Médicos
-                const resMedicos = await fetch(`${API_URL}/medicos`);
+                const resMedicos = await fetch(`${API_URL}/api/medicos`);
                 if(resMedicos.ok) {
                     const medicos = await resMedicos.json();
                     document.getElementById('totalMedicos').innerText = medicos.length || 0;
                 }
 
-                // Buscando Agendamentos (se houver a rota /agendamentos)
-                const resAgendamentos = await fetch(`${API_URL}/agendamentos`);
+                // Buscando Agendamentos
+                const resAgendamentos = await fetch(`${API_URL}/api/agendamentos`);
                 if(resAgendamentos.ok) {
                     const agendamentos = await resAgendamentos.json();
                     document.getElementById('totalAgendamentos').innerText = agendamentos.length || 0;
