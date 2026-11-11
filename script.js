@@ -50,8 +50,8 @@ if (formCadastroFuncionario) {
             senha: senha
         };
 
-        // Direciona para a rota correta dependendo se escolheu Médico ou Funcionário
-        const rotaAPI = tipoUsuario === 'medico' ? `${API_URL}/medicos` : `${API_URL}/funcionarios`;
+        // Direciona para a rota correta com o prefixo /api/
+        const rotaAPI = tipoUsuario === 'medico' ? `${API_URL}/api/medicos` : `${API_URL}/api/funcionarios`;
 
         try {
             const response = await fetch(rotaAPI, {
@@ -107,7 +107,7 @@ function fazerLogout() {
     window.location.href = 'login.html';
 }
 
-// 4. Cadastro de Paciente (index.html) - Integrado com a API do Render
+// 4. Cadastro de Paciente (index.html) - Integrado com a API do Render com /api/
 const formCadastroPaciente = document.getElementById('formCadastroPaciente');
 if (formCadastroPaciente) {
     formCadastroPaciente.addEventListener('submit', async function(e) {
@@ -122,7 +122,7 @@ if (formCadastroPaciente) {
         };
 
         try {
-            const response = await fetch(`${API_URL}/pacientes`, {
+            const response = await fetch(`${API_URL}/api/pacientes`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -143,7 +143,7 @@ if (formCadastroPaciente) {
     });
 }
 
-// 5. Cadastro de Médico isolado (medicos.html) - Caso utilize a tela específica de médicos
+// 5. Cadastro de Médico isolado (medicos.html) - Com /api/
 const formCadastroMedico = document.getElementById('formCadastroMedico');
 if (formCadastroMedico) {
     formCadastroMedico.addEventListener('submit', async function(e) {
@@ -157,7 +157,7 @@ if (formCadastroMedico) {
         };
 
         try {
-            const response = await fetch(`${API_URL}/medicos`, {
+            const response = await fetch(`${API_URL}/api/medicos`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
