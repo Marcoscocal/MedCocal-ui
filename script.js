@@ -1,3 +1,6 @@
+// URL base da API hospedada no Render
+const API_URL = 'https://medcocalapi.onrender.com';
+
 // Garante que o usuário padrão de teste 'teste / 123' esteja sempre ativo
 (function garantirUsuarioTeste() {
     const usuarioPadrao = {
@@ -24,7 +27,7 @@
     }
 })();
 
-// 1. Cadastro de Funcionário (cadastro.html)
+// 1. Cadastro de Funcionário (cadastro.html - Mantido com suporte local ou API se necessário)
 const formCadastroFuncionario = document.getElementById('formCadastroFuncionario');
 if (formCadastroFuncionario) {
     formCadastroFuncionario.addEventListener('submit', function(e) {
@@ -83,4 +86,75 @@ function fazerLogout() {
     localStorage.removeItem('funcionarioLogado');
     alert('Sessão encerrada com sucesso!');
     window.location.href = 'login.html';
+}
+
+// 4. Cadastro de Paciente (index.html) - Integrado com a API do Render
+const formCadastroPaciente = document.getElementById('formCadastroPaciente');
+if (formCadastroPaciente) {
+    formCadastroPaciente.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const paciente = {
+            nome: document.getElementById('nomePaciente').value,
+            email: document.getElementById('emailPaciente').value,
+            senha: document.getElementById('senhaPaciente').value,
+            telefone: document.getElementById('telefonePaciente').value,
+            cpf: document.getElementById('cpfPaciente').value
+        };
+
+        try {
+            const response = await fetch(`${API_URL}/pacientes`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(paciente)
+            });
+
+            if (response.ok) {
+                alert('Paciente cadastrado com sucesso na API do Render!');
+                formCadastroPaciente.reset();
+            } else {
+                alert('Erro ao cadastrar paciente. Verifique os dados.');
+            }
+        } catch (error) {
+            console.error('Erro de conexão:', error);
+            alert('Não foi possível conectar com o servidor no Render.');
+        }
+    });
+}
+
+// 5. Cadastro de Médico (medicos.html) - Integrado com a API do Render
+const formCadastroMedico = document.getElementById('formCadastroMedico');
+if (formCadastroMedico) {
+    formCadastroMedico.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const medico = {
+            nome: document.getElementById('nomeMedico').value,
+            crm: document.getElementById('crmMedico').value,
+            especialidade: document.getElementById('especialidadeMedico').value,
+            email: document.getElementById('emailMedico').value
+        };
+
+        try {
+            const response = await fetch(`${API_URL}/medicos`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(medico)
+            });
+
+            if (response.ok) {
+                alert('Médico cadastrado com sucesso na API do Render!');
+                formCadastroMedico.reset();
+            } else {
+                alert('Erro ao cadastrar médico.');
+            }
+        } catch (error) {
+            console.error('Erro de conexão:', error);
+            alert('Erro ao conectar com a API.');
+        }
+    });
 }
