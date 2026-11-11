@@ -11,7 +11,6 @@ const API_URL = 'https://medcocalapi.onrender.com';
         senha: '123'
     };
     
-    // Sempre define ou atualiza o usuarioPadrao de teste
     localStorage.setItem('usuarioTestePadrao', JSON.stringify(usuarioPadrao));
 })();
 
@@ -27,10 +26,10 @@ const API_URL = 'https://medcocalapi.onrender.com';
     }
 })();
 
-// 1. Cadastro de Funcionário (cadastro.html - Mantido com suporte local ou API se necessário)
+// 1. Cadastro Interno (Funcionário ou Médico) - (cadastro.html)
 const formCadastroFuncionario = document.getElementById('formCadastroFuncionario');
 if (formCadastroFuncionario) {
-    formCadastroFuncionario.addEventListener('submit', function(e) {
+    formCadastroFuncionario.addEventListener('submit', async function(e) {
         e.preventDefault();
 
         const senha = document.getElementById('senhaFuncionario').value;
@@ -41,7 +40,9 @@ if (formCadastroFuncionario) {
             return;
         }
 
-        const funcionario = {
+        const tipoUsuario = document.getElementById('tipoUsuario').value;
+        
+        const dadosUsuario = {
             nome: document.getElementById('nomeFuncionario').value,
             email: document.getElementById('emailFuncionario').value,
             cpf: document.getElementById('cpfFuncionario').value,
@@ -49,13 +50,32 @@ if (formCadastroFuncionario) {
             senha: senha
         };
 
-        localStorage.setItem('funcionarioCadastrado', JSON.stringify(funcionario));
-        alert('Conta de funcionário criada com sucesso! Faça login para continuar.');
-        window.location.href = 'login.html';
+        // Direciona para a rota correta dependendo se escolheu Médico ou Funcionário
+        const rotaAPI = tipoUsuario === 'medico' ? `${API_URL}/medicos` : `${API_URL}/funcionarios`;
+
+        try {
+            const response = await fetch(rotaAPI, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dadosUsuario)
+            });
+
+            if (response.ok) {
+                alert(`Cadastro de ${tipoUsuario} realizado com sucesso na API!`);
+                window.location.href = 'login.html';
+            } else {
+                alert('Erro ao realizar o cadastro. Verifique os dados.');
+            }
+        } catch (error) {
+            console.error('Erro de conexão:', error);
+            alert('Erro ao conectar com a API no Render.');
+        }
     });
 }
 
-// 2. Login de Funcionário (login.html)
+// 2. Login de Funcionário/Médico (login.html)
 const formLogin = document.getElementById('formLogin');
 if (formLogin) {
     formLogin.addEventListener('submit', function(e) {
@@ -64,7 +84,6 @@ if (formLogin) {
         const emailDigitado = document.getElementById('loginEmail').value.trim();
         const senhaDigitada = document.getElementById('loginSenha').value.trim();
 
-        // Busca tanto o usuário de teste padrão quanto eventuais cadastros manuais
         const usuarioPadrao = JSON.parse(localStorage.getItem('usuarioTestePadrao'));
         const funcionarioCadastrado = JSON.parse(localStorage.getItem('funcionarioCadastrado'));
 
@@ -124,7 +143,7 @@ if (formCadastroPaciente) {
     });
 }
 
-// 5. Cadastro de Médico (medicos.html) - Integrado com a API do Render
+// 5. Cadastro de Médico isolado (medicos.html) - Caso utilize a tela específica de médicos
 const formCadastroMedico = document.getElementById('formCadastroMedico');
 if (formCadastroMedico) {
     formCadastroMedico.addEventListener('submit', async function(e) {

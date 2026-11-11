@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultas e Registros - MedCocal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-light">
+
+    <!-- Menu Superior -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">MedCocal</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="index.html">Pacientes</a>
+                <a class="nav-link" href="medicos.html">Médicos</a>
+                <a class="nav-link" href="servicos.html">Serviços</a>
+                <a class="nav-link" href="agendamentos.html">Agendamentos</a>
+                <a class="nav-link active" href="consultas.html">Consultas/Totais</a>
+                <button class="btn btn-outline-light btn-sm ms-3" onclick="fazerLogout()">Sair</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2 class="mb-4 text-center">Painel de Consultas e Registros do Sistema</h2>
+
+        <!-- Cards de Totais -->
+        <div class="row text-center mb-5">
+            <div class="col-md-4">
+                <div class="card shadow-sm p-3">
+                    <h4>Total de Pacientes</h4>
+                    <h2 id="totalPacientes" class="text-primary">Carregando...</h2>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm p-3">
+                    <h4>Total de Médicos</h4>
+                    <h2 id="totalMedicos" class="text-success">Carregando...</h2>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm p-3">
+                    <h4>Total de Agendamentos</h4>
+                    <h2 id="totalAgendamentos" class="text-warning">Carregando...</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botão para atualizar dados -->
+        <div class="text-center">
+            <button class="btn btn-primary btn-lg" onclick="carregarTotais()">Atualizar Dados da API</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Função para buscar e exibir as contagens da API
+        async function carregarTotais() {
+            try {
+                // Buscando Pacientes
+                const resPacientes = await fetch(`${API_URL}/pacientes`);
+                if(resPacientes.ok) {
+                    const pacientes = await resPacientes.json();
+                    document.getElementById('totalPacientes').innerText = pacientes.length || 0;
+                }
+
+                // Buscando Médicos
+                const resMedicos = await fetch(`${API_URL}/medicos`);
+                if(resMedicos.ok) {
+                    const medicos = await resMedicos.json();
+                    document.getElementById('totalMedicos').innerText = medicos.length || 0;
+                }
+
+                // Buscando Agendamentos (se houver a rota /agendamentos)
+                const resAgendamentos = await fetch(`${API_URL}/agendamentos`);
+                if(resAgendamentos.ok) {
+                    const agendamentos = await resAgendamentos.json();
+                    document.getElementById('totalAgendamentos').innerText = agendamentos.length || 0;
+                }
+            } catch (error) {
+                console.error("Erro ao carregar dados da API:", error);
+            }
+        }
+
+        // Executa assim que a página abre
+        window.onload = carregarTotais;
+    </script>
+</body>
+</html>

@@ -10,7 +10,7 @@
 
     <div class="login-card" style="max-width: 480px;">
         <div class="login-header">
-            <h2>Criar Conta de Funcionário</h2>
+            <h2>Criar Conta Interna</h2>
         </div>
         
         <form id="formCadastroFuncionario" class="login-form">
@@ -33,6 +33,16 @@
                     <label for="celularFuncionario">Celular</label>
                     <input type="tel" id="celularFuncionario" required placeholder="(00) 00000-0000">
                 </div>
+            </div>
+
+            <!-- Novo campo para selecionar o Tipo de Usuário -->
+            <div class="form-group">
+                <label for="tipoUsuario">Tipo de Perfil</label>
+                <select id="tipoUsuario" class="form-control" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+                    <option value="" disabled selected>Selecione se é Funcionário ou Médico</option>
+                    <option value="funcionario">Funcionário / Atendente</option>
+                    <option value="medico">Médico</option>
+                </select>
             </div>
 
             <div style="display: flex; gap: 10px;">
